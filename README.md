@@ -4,6 +4,13 @@
 
 ### Install & Usage (Without Docker)
 
+- *Setup your own hostname for DEVELOPMENT condition in todoapp/settings.py*
+- *You can learn from socket library*
+```
+import socket
+socket.gethostname()
+"yourhostname"
+```
 - *Clone the repository:*
 ```
 git clone https://github.com/erkamesen/TodoApp.git
@@ -43,7 +50,13 @@ python manage.py runserver
 ```
 
 ### Install & Usage (With Docker)
-
+- *Setup your own hostname for DEVELOPMENT condition in todoapp/settings.py*
+- *You can learn from socket library*
+```
+import socket
+socket.gethostname()
+"yourhostname"
+```
 - *Clone the repository:*
 ```
 git clone https://github.com/erkamesen/TodoApp.git
