@@ -18,7 +18,7 @@ def completed_tasks(request):
     context = {
         "tasks": completed_tasks,
     }
-    return render(request, "completed.html", context=context)
+    return render(request, "index.html", context=context)
 
 def uncompleted_tasks(request):
     resp = requests.get("http://127.0.0.1:8000/api/tasks/")
@@ -27,7 +27,7 @@ def uncompleted_tasks(request):
     context = {
         "tasks": uncompleted_tasks,
     }
-    return render(request, "uncompleted.html", context=context)
+    return render(request, "index.html", context=context)
 
 
 
