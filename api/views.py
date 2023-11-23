@@ -4,12 +4,13 @@ from .serializers import TaskSerializer
 from .models import Tasks
 from rest_framework import status
 
+
 # API DASHBOARD
 @api_view(['GET'])
 def api_dashboard(request):
     api_urls = {
         'List' : '/tasks/',                             # READ
-        'Detail View' : '/task-detail/<str:id>/',       # READ
+        'Detail View' : '/task/<str:id>/',              # READ
         'Create' : '/task-create/',                     # CREATE
         'Update' : '/task-update/<str:id>/',            # UPDATE
         'Delete' : '/task-delete/<str:id>/',            # DELETE
@@ -38,9 +39,25 @@ def get_task(request, id):
 
 
 @api_view(["POST"])
-def update_task(request, pk):
-    task = Tasks.objects.get(id = pk)
+def update_task(request, id):
+    task = Tasks.objects.get(id = id)
     serializer = TaskSerializer(instance=task, data=request.data)
     if serializer.is_valid():
         serializer.save()
-    return Response(serializer.data)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+
+@api_view(['POST'])
+def create_task(request):
+    serializer = TaskSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save()
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+@api_view(['POST'])
+def delete_task(request, id):
+    task = Tasks.objects.get(id = id)
+    task.delete()
+    return Response("Task deleted successfully.", status=status.HTTP_200_OK)

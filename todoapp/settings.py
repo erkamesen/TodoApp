@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
-
+import socket
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -27,6 +27,44 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*", ]
 
+DEVELOPMENT = socket.gethostname()
+
+if DEVELOPMENT != "DESKTOP-M2PB8FH":
+    DEBUG = False
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'tododb',
+        'USER': 'erkam',
+        'PASSWORD': 'erkam',
+        'HOST': 'db',
+        'PORT': '5432',
+    }
+}
+    LOGGING = {
+        'version': 1,
+        'disable_existing_loggers': False,
+        'handlers': {
+            'file': {
+                'level': 'DEBUG',
+                'class': 'logging.FileHandler',
+                'filename': 'debug.log',
+            },
+        },
+        'root': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
+    }
+else:
+    DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
+}
+
+
 
 # Application definition
 
@@ -40,6 +78,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'bootstrap5',
+    'jazzmin',
 ]
 
 MIDDLEWARE = [
@@ -72,23 +112,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'todoapp.wsgi.application'
-
-
-# Database
-# https://docs.djangoproject.com/en/4.2/ref/settings/#databases
-
-
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'tododb',
-        'USER': 'erkam',
-        'PASSWORD': 'erkam',
-        'HOST': 'db',
-        'PORT': '5432',
-    }
-}
 
 
 # Password validation
@@ -135,4 +158,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://localhost:5000",
+    "http://localhost:8000",
 ]

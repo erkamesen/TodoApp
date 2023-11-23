@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load tz %}
+{% block content %}
+              {% for task in tasks %}
+              {% if task.is_complete %}
+              <ul class="list-group list-group-horizontal rounded-0" id="task{{ forloop.counter }}">
+                <li
+                  class="list-group-item d-flex align-items-center ps-0 pe-3 py-1 rounded-0 border-0 bg-transparent">
+                  <div class="form-check">
+                    <form action="{% url 'update-task' id=task.id %}" method="post">
+                      {% csrf_token %}
+                      <input type="hidden" name="is_complete" value="0">
+                      <input type="hidden" name="task" value="{{ task.task }}">
+                      <input type="hidden" name="description" value="{{ task.description }}">
+                      <input type="hidden" name="priority" value="{{ task.priority }}">
+                      <input type="hidden" name="icon" value="{{ task.icon }}">
+                      <input type="submit" value="Uncomplete" id="flexCheckChecked2" aria-label="..." />
+                  </form>
+                  </div>
+                </li>
+                <li
+                  class="list-group-item px-3 py-1 d-flex align-items-center flex-grow-1 border-0 bg-transparent">
+                  <p class="lead fw-normal mb-0">{{ task.task }}</p>
+                 
+                </li>
+                <p class="lead fw-normal mb-0 text-muted">Elapsed Time {{ task.elapsed_time_seconds }}</p>
+                <li class="list-group-item px-3 py-1 d-flex align-items-center border-0 bg-transparent">
+                  <div
+                    class="py-2 px-3 me-2 border border-warning rounded-3 d-flex align-items-center  
+                    {% if task.priority == 'Low' %}
+                    bg-light text-muted
+                    {% elif task.priority == 'Medium' %}
+                    bg-success text-danger
+                    {% else %} 
+                    bg-danger text-light
+                    {% endif %}">
+                    <p class="small mb-0 text-uppercase !font-weight-bold" style="font-weight: bolder;">
+                      <a href="#!" data-mdb-toggle="tooltip" title="Due on date">
+                        <i class="fas fa-hourglass-half me-2 text-warning"></i>
+                      </a>
+                      {{ task.priority }}
+                      
+                    </p>
+                  </div>
+                </li>
+                <li class="list-group-item ps-3 pe-0 py-1 rounded-0 border-0 bg-transparent">
+                  <div class="d-flex flex-row justify-content-end mb-1">
+                    <form id="deleteForm" action="{% url 'delete-task' id=task.id %}" method="POST">
+                      {% csrf_token %}
+                      <i class="fas fa-trash-alt"></i>
+                      <input type="submit" id="deleteButton" value="DELETE"></input>
+                  </form>
+                  </div>
+                  <div class="text-end text-muted">
+                    <a href="#!" class="text-muted" data-mdb-toggle="tooltip" title="Created date">
+                      <p class="small mb-0"><i class="fas fa-info-circle me-2"></i>{{ task.created_at|slice:":10" }}</p>
+                    </a>
+                  </div>
+                </li>
+              </ul>
+              {% endif %}
+              {% empty %}
+              <h1 class="bg-danger text-light text-center">Tasks not found.</h1>
+              {% endfor %}
+{% endblock content %}
